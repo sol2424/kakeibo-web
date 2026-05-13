@@ -1,2 +1,58 @@
-# kakeibo-web
-デスクトップ用の家計簿アプリをwebアプリとして再現
+# 家計簿アプリwebアプリ版
+
+# 1.はじめに
+
+より実務に近い環境での学習を目的として
+
+デスクトップアプリとして制作した家計簿アプリを
+
+Spring Bootを用いてwebアプリとして再現しました。
+
+## 公開URL
+
+http://13.193.224.69:8080
+
+## 使用技術   
+***言語***
+- Java SE17
+
+***フレームワーク / UI***
+- Spring Boot
+
+***データベース***
+- H2 Database
+
+***フロント***
+- HTML
+- CSS
+- Bootstrap
+
+***グラフ***
+- Chart.js
+
+***開発環境/ツール***
+- Eclipse
+- Maven
+
+<br>
+<br>
+
+## アプリ画面
+
+<img width="1812" height="912" alt="kakeibo" src="https://github.com/user-attachments/assets/6441164b-e8d3-4946-bb26-be0952f13c0d" />
+
+# 2.機能一覧  
+
+- 収入・支出の入力（項目・金額・日付）とリストの表示   
+- データ編集/削除機能の追加
+- フィルター機能を用いた合計表示機能
+- グラフ表示機能  
+- データ永続化（H2 Database）
+- CSSを利用し背景画像を追加  
+  - 使用画像：OKUMONO様より かわいい雲の柄背景　https://sozaino.site/archives/6411#google_vignette
+ 
+# 3.工夫したこと 
+
+# 4.今後の課題及び追加予定機能
+
+# 5.おわりに
