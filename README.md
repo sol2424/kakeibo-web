@@ -35,7 +35,7 @@ Spring Bootを用いてwebアプリとして再現しました。
 
 ## アプリ画面
 
-※後ほどスクリーンショットを追加予定
+<img width="1812" height="912" alt="kakeibo" src="https://github.com/user-attachments/assets/6441164b-e8d3-4946-bb26-be0952f13c0d" />
 
 # 2.機能一覧  
 
