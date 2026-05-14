@@ -10,7 +10,9 @@ Spring Bootを用いてwebアプリとして再現しました。
 
 ## 公開URL
 
-http://13.193.224.69:8080
+https://kakeiboweb.sol2424.com/
+
+AWS EC2へデプロイ + Nginx + HTTPS化済み
 
 ## 使用技術   
 ***言語***
