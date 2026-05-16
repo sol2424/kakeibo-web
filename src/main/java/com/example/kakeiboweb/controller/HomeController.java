@@ -2,6 +2,8 @@ package com.example.kakeiboweb.controller;
 
 import java.time.LocalDate;
 import java.time.Year;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +34,8 @@ public class HomeController {
         @RequestParam(required = false) Boolean showIncome,
         @RequestParam(required = false) Boolean showExpense,
         @RequestParam(required = false) String activeTab,
+        @RequestParam(required = false) String sort,
+        @RequestParam(required = false) String direction,
         @RequestParam(required = false) String selectedType,
         Model model
     ) {
@@ -53,12 +57,49 @@ public class HomeController {
 
     	if (activeTab == null) activeTab = "input";
     	if (selectedType == null) selectedType = "income";
+    	
+    	if (sort == null) sort = "date";
+    	if (direction == null) direction = "desc";
 
         // 全件（入力タブ用）
         List<Transaction> allList = service.findAll();
+        
+        //ソート処理
+        switch (sort) {
+
+        case "amount":
+            allList.sort(
+                Comparator.comparing(Transaction::getAmount)
+            );
+            break;
+
+        case "category":
+            allList.sort(
+                Comparator.comparing(Transaction::getCategory)
+            );
+            break;
+
+        case "type":
+            allList.sort(
+                Comparator.comparing(Transaction::getType)
+            );
+            break;
+
+        default:
+            allList.sort(
+                Comparator.comparing(Transaction::getDate)
+            );
+    }
+        if ("desc".equals(direction)) {
+            Collections.reverse(allList);
+        }
 
      // フィルタ済み
         List<Transaction> filteredList = service.filter(year, month, showIncome, showExpense);
+        
+     // 月別グラフ専用（年だけで取得）
+        List<Transaction> yearlyList =
+                service.filter(year, null, showIncome, showExpense);
 
         int income = 0;
         int expense = 0;
@@ -79,14 +120,21 @@ public class HomeController {
             expenseData.put(i, 0);
         }
 
-        for (Transaction t : filteredList) {
+        for (Transaction t : yearlyList) {
+
             int m = t.getDate().getMonthValue();
 
             if ("income".equals(t.getType())) {
-                incomeData.put(m, incomeData.get(m) + t.getAmount());
+                incomeData.put(
+                    m,
+                    incomeData.get(m) + t.getAmount()
+                );
 
             } else if ("expense".equals(t.getType())) {
-                expenseData.put(m, expenseData.get(m) + t.getAmount());
+                expenseData.put(
+                    m,
+                    expenseData.get(m) + t.getAmount()
+                );
             }
         }
         
@@ -124,6 +172,9 @@ public class HomeController {
         model.addAttribute("activeTab", activeTab);
         model.addAttribute("selectedType", selectedType);
 
+        model.addAttribute("sort", sort);
+        model.addAttribute("direction", direction);
+        
         return "index";
     }
 

@@ -99,15 +99,19 @@ public class TransactionService {
     
     //フィルタ処理
     
-    public List<Transaction> filter(int year, int month, boolean showIncome, boolean showExpense) {
+    public List<Transaction> filter(Integer year, Integer month, Boolean showIncome, Boolean showExpense) {
+    	return findAll().stream()
+    		    .filter(t -> year == null
+    		        || t.getDate().getYear() == year)
 
-        return repository.findAll().stream()
-            .filter(t -> t.getDate().getYear() == year)
-            .filter(t -> t.getDate().getMonthValue() == month)
-            .filter(t -> 
-                (showIncome && t.getType().equals("income")) ||
-                (showExpense && t.getType().equals("expense"))
-            )
-            .toList();
+    		    .filter(t -> month == null
+    		        || t.getDate().getMonthValue() == month)
+
+    		    .filter(t ->
+    		        (showIncome && "income".equals(t.getType()))
+    		        ||
+    		        (showExpense && "expense".equals(t.getType()))
+    		    )
+    		    .toList();
     }
 }

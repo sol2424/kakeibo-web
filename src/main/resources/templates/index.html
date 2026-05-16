@@ -142,11 +142,59 @@
 	                <table class="table table-striped">
 	                    <thead>
 	                        <tr>
-	                            <th>日付</th>
-	                            <th>金額</th>
-	                            <th>カテゴリ</th>
-	                            <th>メモ</th>
-	                            <th>種別</th>
+								<th>
+								    <a th:href="@{/(
+								        sort='date',
+								        direction=${sort == 'date' and direction == 'asc'
+								            ? 'desc'
+								            : 'asc'},
+								        activeTab='input'
+								    )}">
+								        日付
+								        <span th:if="${sort == 'date'}"
+								              th:text="${direction == 'asc' ? '▲' : '▼'}"></span>
+								    </a>
+								</th>
+								<th>
+								    <a th:href="@{/(
+								        sort='amount',
+								        direction=${sort == 'amount' and direction == 'asc'
+								            ? 'desc'
+								            : 'asc'},
+								        activeTab='input'
+								    )}">
+								        金額
+								        <span th:if="${sort == 'amount'}"
+								              th:text="${direction == 'asc' ? '▲' : '▼'}"></span>
+								    </a>
+								</th>
+								<th>
+								    <a th:href="@{/(
+								        sort='category',
+								        direction=${sort == 'category' and direction == 'asc'
+								            ? 'desc'
+								            : 'asc'},
+								        activeTab='input'
+								    )}">
+								        カテゴリ
+								        <span th:if="${sort == 'category'}"
+								              th:text="${direction == 'asc' ? '▲' : '▼'}"></span>
+								    </a>
+								</th>
+								<th>
+								    <a th:href="@{/(
+								        sort='type',
+								        direction=${sort == 'type' and direction == 'asc'
+								            ? 'desc'
+								            : 'asc'},
+								        activeTab='input'
+								    )}">
+								        種別
+								        <span th:if="${sort == 'type'}"
+								              th:text="${direction == 'asc' ? '▲' : '▼'}"></span>
+								    </a>
+								</th>
+								<th>メモ</th>
 	                            <th>削除</th>
 	                            <th>編集</th>
 	                        </tr>
@@ -158,9 +206,10 @@
 								    th:text="${#numbers.formatInteger(t.amount, 0, 'COMMA')}"
 								    th:class="${t.type == 'income'} ? 'text-primary fw-bold' : 'text-danger fw-bold'">
 								</td>
-	                            <td th:text="${t.category}"></td>
-	                            <td th:text="${t.memo}"></td>
-	                           <td th:text="${t.type == 'income' ? '収入' : '支出'}"></td>
+								
+								<td th:text="${t.category}"></td>
+								<td th:text="${t.type == 'income'} ? '収入' : '支出'"></td>
+								<td th:text="${t.memo}"></td>
 
 	                            <td>
 	                                <form action="/delete" method="post">
@@ -259,12 +308,81 @@
 					<table class="table table-striped">
 					    <thead>
 					        <tr>
-					            <th>日付</th>
-					            <th>金額</th>
-					            <th>カテゴリ</th>
-					            <th>メモ</th>
-					            <th>種別</th>
+								<th>
+								    <a th:href="@{/(
+								        sort='date',
+								        direction=${sort == 'date' and direction == 'asc'
+								            ? 'desc'
+								            : 'asc'},
+								        activeTab='summary',
+								        year=${year},
+								        month=${month},
+								        showIncome=${showIncome},
+								        showExpense=${showExpense}
+								    )}">
+								        日付
+								        <span th:if="${sort == 'date'}"
+								              th:text="${direction == 'asc' ? '▲' : '▼'}">
+								        </span>
+								    </a>
+								</th>
+								<th>
+								    <a th:href="@{/(
+								        sort='amount',
+								        direction=${sort == 'amount' and direction == 'asc'
+								            ? 'desc'
+								            : 'asc'},
+								        activeTab='summary',
+								        year=${year},
+								        month=${month},
+								        showIncome=${showIncome},
+								        showExpense=${showExpense}
+								    )}">
+								        金額
+								        <span th:if="${sort == 'amount'}"
+								              th:text="${direction == 'asc' ? '▲' : '▼'}">
+								        </span>
+								    </a>
+								</th>
+								<th>
+								    <a th:href="@{/(
+								        sort='category',
+								        direction=${sort == 'category' and direction == 'asc'
+								            ? 'desc'
+								            : 'asc'},
+								        activeTab='summary',
+								        year=${year},
+								        month=${month},
+								        showIncome=${showIncome},
+								        showExpense=${showExpense}
+								    )}">
+								        カテゴリ
+								        <span th:if="${sort == 'category'}"
+								              th:text="${direction == 'asc' ? '▲' : '▼'}">
+								        </span>
+								    </a>
+								</th>
+								<th>
+								    <a th:href="@{/(
+								        sort='type',
+								        direction=${sort == 'type' and direction == 'asc'
+								            ? 'desc'
+								            : 'asc'},
+								        activeTab='summary',
+								        year=${year},
+								        month=${month},
+								        showIncome=${showIncome},
+								        showExpense=${showExpense}
+								    )}">
+								        種別
+								        <span th:if="${sort == 'type'}"
+								              th:text="${direction == 'asc' ? '▲' : '▼'}">
+								        </span>
+								    </a>
+								</th>
+								<th>メモ</th>
 					        </tr>
+
 					    </thead>
 					    <tbody>
 					        <tr th:each="t : ${filteredTransactions}">
@@ -275,9 +393,9 @@
 								        ? 'text-primary fw-bold'
 								        : 'text-danger fw-bold'">
 								</td>
-					            <td th:text="${t.category}"></td>
-					            <td th:text="${t.memo}"></td>
-					           <td th:text="${t.type == 'income' ? '収入' : '支出'}"></td>
+								<td th:text="${t.category}"></td>
+								<td th:text="${t.type == 'income'} ? '収入' : '支出'"></td>
+								<td th:text="${t.memo}"></td>
 					        </tr>
 					    </tbody>
 					</table>
