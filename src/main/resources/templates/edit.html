@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>編集</title>
+    <title>家計簿アプリ - 編集</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
           rel="stylesheet">
@@ -18,37 +19,51 @@
 
 <div class="container mt-4">
 
-    <h2 class="text-center mb-4">データ編集</h2>
+    <!-- タイトル -->
+    <h2 class="text-center mb-4">
+        家計簿アプリ
+    </h2>
 
-    <div class="card p-4">
+    <!-- カード -->
+    <div class="card p-4 shadow">
 
-        <form action="/update" method="post">
+        <h4 class="mb-4 text-center">
+            データ編集
+        </h4>
+
+        <form th:action="@{/update}"
+              th:object="${transaction}"
+              method="post">
 
             <!-- ID -->
             <input type="hidden"
-                   name="id"
-                   th:value="${transaction.id}">
+                   th:field="*{id}">
 
             <!-- 1行目 -->
             <div class="row mb-3 align-items-center">
 
                 <!-- 日付 -->
                 <div class="col-md-6">
-                    <input type="date"
-                           name="date"
-                           class="form-control"
-                           th:value="${transaction.date}">
+
+					<input type="date"
+					       th:field="*{date}"
+					       th:value="${#temporals.format(transaction.date, 'yyyy-MM-dd')}"
+					       class="form-control">
+
+                    <div class="text-danger small mt-1"
+                         th:if="${#fields.hasErrors('date')}"
+                         th:errors="*{date}">
+                    </div>
                 </div>
 
-                <!-- 種別 -->
+                <!-- ラジオボタン -->
                 <div class="col-md-6">
 
                     <div class="form-check form-check-inline">
                         <input class="form-check-input"
                                type="radio"
-                               name="type"
-                               value="income"
-                               th:checked="${transaction.type == 'income'}">
+                               th:field="*{type}"
+                               value="income">
 
                         <label class="form-check-label">
                             収入
@@ -58,13 +73,17 @@
                     <div class="form-check form-check-inline">
                         <input class="form-check-input"
                                type="radio"
-                               name="type"
-                               value="expense"
-                               th:checked="${transaction.type == 'expense'}">
+                               th:field="*{type}"
+                               value="expense">
 
                         <label class="form-check-label">
                             支出
                         </label>
+                    </div>
+
+                    <div class="text-danger small mt-1"
+                         th:if="${#fields.hasErrors('type')}"
+                         th:errors="*{type}">
                     </div>
 
                 </div>
@@ -76,20 +95,30 @@
 
                 <!-- 金額 -->
                 <div class="col-md-6">
+
                     <input type="number"
-                           name="amount"
+                           th:field="*{amount}"
                            class="form-control"
-                           placeholder="金額"
-                           th:value="${transaction.amount}">
+                           placeholder="金額">
+
+                    <div class="text-danger small mt-1"
+                         th:if="${#fields.hasErrors('amount')}"
+                         th:errors="*{amount}">
+                    </div>
                 </div>
 
                 <!-- カテゴリ -->
                 <div class="col-md-6">
+
                     <input type="text"
-                           name="category"
+                           th:field="*{category}"
                            class="form-control"
-                           placeholder="カテゴリ"
-                           th:value="${transaction.category}">
+                           placeholder="カテゴリ（給与/光熱費/食費 等）">
+
+                    <div class="text-danger small mt-1"
+                         th:if="${#fields.hasErrors('category')}"
+                         th:errors="*{category}">
+                    </div>
                 </div>
 
             </div>
@@ -99,11 +128,16 @@
 
                 <!-- メモ -->
                 <div class="col-md-9">
+
                     <input type="text"
-                           name="memo"
+                           th:field="*{memo}"
                            class="form-control"
-                           placeholder="メモ"
-                           th:value="${transaction.memo}">
+                           placeholder="メモ">
+
+                    <div class="text-danger small mt-1"
+                         th:if="${#fields.hasErrors('memo')}"
+                         th:errors="*{memo}">
+                    </div>
                 </div>
 
                 <!-- 更新ボタン -->
@@ -118,8 +152,9 @@
         </form>
 
         <!-- 戻る -->
-        <div class="mt-3 text-center">
-            <a href="/" class="btn btn-secondary">
+        <div class="mt-4">
+            <a href="/"
+               class="btn btn-secondary w-100">
                 戻る
             </a>
         </div>

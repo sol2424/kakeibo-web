@@ -49,91 +49,120 @@
 
 				 <div class="card p-3 mb-3">
 
-				     <form action="/add" method="post">
+					<form th:action="@{/add}"
+					      th:object="${transaction}"
+					      method="post">
 
-				         <!-- 1行目 -->
-				         <div class="row mb-3 align-items-center">
+					    <!-- 1行目 -->
+					    <div class="row mb-3 align-items-center">
 
-				             <!-- 日付 -->
-				             <div class="col-md-6">
-				                 <input type="date"
-				                        name="date"
-				                        class="form-control">
-				             </div>
+					        <!-- 日付 -->
+					        <div class="col-md-6">
 
-				             <!-- ラジオボタン -->
-				             <div class="col-md-6">
+					            <input type="date"
+					                   th:field="*{date}"
+					                   class="form-control">
 
-				                 <div class="form-check form-check-inline">
-									<input class="form-check-input"
-									       type="radio"
-									       name="type"
-									       value="income"
-									       th:checked="${selectedType == 'income'}">
+					            <div class="text-danger small"
+					                 th:if="${#fields.hasErrors('date')}"
+					                 th:errors="*{date}">
+					            </div>
+					        </div>
 
-				                     <label class="form-check-label">
-				                         収入
-				                     </label>
-				                 </div>
+					        <!-- ラジオボタン -->
+					        <div class="col-md-6">
 
-				                 <div class="form-check form-check-inline">
-									<input class="form-check-input"
-									       type="radio"
-									       name="type"
-									       value="expense"
-									       th:checked="${selectedType == 'expense'}">
+					            <div class="form-check form-check-inline">
+					                <input class="form-check-input"
+					                       type="radio"
+					                       th:field="*{type}"
+					                       value="income">
 
-				                     <label class="form-check-label">
-				                         支出
-				                     </label>
-				                 </div>
+					                <label class="form-check-label">
+					                    収入
+					                </label>
+					            </div>
 
-				             </div>
+					            <div class="form-check form-check-inline">
+					                <input class="form-check-input"
+					                       type="radio"
+					                       th:field="*{type}"
+					                       value="expense">
 
-				         </div>
+					                <label class="form-check-label">
+					                    支出
+					                </label>
+					            </div>
 
-				         <!-- 2行目 -->
-				         <div class="row mb-3">
+					            <div class="text-danger small"
+					                 th:if="${#fields.hasErrors('type')}"
+					                 th:errors="*{type}">
+					            </div>
 
-				             <!-- 金額 -->
-				             <div class="col-md-6">
-				                 <input type="number"
-				                        name="amount"
-				                        class="form-control"
-				                        placeholder="金額">
-				             </div>
+					        </div>
 
-				             <!-- カテゴリ -->
-				             <div class="col-md-6">
-				                 <input type="text"
-				                        name="category"
-				                        class="form-control"
-				                        placeholder="カテゴリ（給与/光熱費/食費 等）">
-				             </div>
+					    </div>
 
-				         </div>
+					    <!-- 2行目 -->
+					    <div class="row mb-3">
 
-				         <!-- 3行目 -->
-				         <div class="row align-items-center">
+					        <!-- 金額 -->
+					        <div class="col-md-6">
 
-				             <!-- メモ -->
-				             <div class="col-md-9">
-				                 <input type="text"
-				                        name="memo"
-				                        class="form-control"
-				                        placeholder="メモ">
-				             </div>
+					            <input type="number"
+					                   th:field="*{amount}"
+					                   class="form-control"
+					                   placeholder="金額">
 
-				             <!-- 追加ボタン -->
-				             <div class="col-md-3">
-				                 <button class="btn btn-primary w-100">
-				                     追加
-				                 </button>
-				             </div>
+					            <div class="text-danger small"
+					                 th:if="${#fields.hasErrors('amount')}"
+					                 th:errors="*{amount}">
+					            </div>
+					        </div>
 
-				         </div>
+					        <!-- カテゴリ -->
+					        <div class="col-md-6">
 
-				     </form>
+					            <input type="text"
+					                   th:field="*{category}"
+					                   class="form-control"
+					                   placeholder="カテゴリ（給与/光熱費/食費 等）">
+
+					            <div class="text-danger small"
+					                 th:if="${#fields.hasErrors('category')}"
+					                 th:errors="*{category}">
+					            </div>
+					        </div>
+
+					    </div>
+
+					    <!-- 3行目 -->
+					    <div class="row align-items-center">
+
+					        <!-- メモ -->
+					        <div class="col-md-9">
+
+					            <input type="text"
+					                   th:field="*{memo}"
+					                   class="form-control"
+					                   placeholder="メモ">
+
+					            <div class="text-danger small"
+					                 th:if="${#fields.hasErrors('memo')}"
+					                 th:errors="*{memo}">
+					            </div>
+					        </div>
+
+					        <!-- 追加ボタン -->
+					        <div class="col-md-3">
+					            <button class="btn btn-primary w-100">
+					                追加
+					            </button>
+					        </div>
+
+					    </div>
+
+					</form>
 
 				 </div>
 				 

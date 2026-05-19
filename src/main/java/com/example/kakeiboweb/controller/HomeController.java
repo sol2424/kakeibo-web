@@ -9,9 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
+import jakarta.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -175,27 +179,71 @@ public class HomeController {
         model.addAttribute("sort", sort);
         model.addAttribute("direction", direction);
         
+        Transaction transaction = new Transaction();
+        transaction.setType(selectedType);
+
+        model.addAttribute("transaction", transaction);
+        
         return "index";
     }
 
     @PostMapping("/add")
     public String add(
-        @RequestParam String date,
-        @RequestParam int amount,
-        @RequestParam String category,
-        @RequestParam String memo,
-        @RequestParam String type
+            @Valid @ModelAttribute("transaction") Transaction transaction,
+            BindingResult result,
+            Model model
     ) {
-        Transaction t = new Transaction();
-        t.setDate(LocalDate.parse(date));
-        t.setAmount(amount);
-        t.setCategory(category);
-        t.setMemo(memo);
-        t.setType(type);
 
-        service.save(t);
+        // 入力エラー
+        if (result.hasErrors()) {
 
-        return "redirect:/?selectedType=" + type;
+            // home画面表示用データを再セット
+            List<Transaction> allList = service.findAll();
+
+            model.addAttribute("transactions", allList);
+            model.addAttribute("filteredTransactions", allList);
+
+            model.addAttribute("income", 0);
+            model.addAttribute("expense", 0);
+
+            model.addAttribute("incomeData", new HashMap<>());
+            model.addAttribute("expenseData", new HashMap<>());
+            model.addAttribute("categoryData", new HashMap<>());
+
+            int currentYear = Year.now().getValue();
+
+            List<Integer> years = IntStream
+                    .rangeClosed(currentYear - 5, currentYear + 1)
+                    .boxed()
+                    .toList();
+
+            model.addAttribute("years", years);
+
+            model.addAttribute("year", LocalDate.now().getYear());
+            model.addAttribute("month", LocalDate.now().getMonthValue());
+
+            model.addAttribute("showIncome", true);
+            model.addAttribute("showExpense", true);
+
+            model.addAttribute("sort", "date");
+            model.addAttribute("direction", "desc");
+
+            // 入力タブ維持
+            model.addAttribute("activeTab", "input");
+
+            // ラジオボタン維持
+            model.addAttribute(
+                    "selectedType",
+                    transaction.getType()
+            );
+
+            return "index";
+        }
+
+        service.save(transaction);
+
+        return "redirect:/?selectedType="
+                + transaction.getType();
     }
     
     @PostMapping("/delete")
@@ -218,22 +266,17 @@ public class HomeController {
     
     @PostMapping("/update")
     public String update(
-        @RequestParam Long id,
-        @RequestParam String date,
-        @RequestParam int amount,
-        @RequestParam String category,
-        @RequestParam String memo,
-        @RequestParam String type
+            @Valid @ModelAttribute("transaction")
+            Transaction transaction,
+            BindingResult result
     ) {
-        Transaction t = new Transaction();
-        t.setId(id);
-        t.setDate(LocalDate.parse(date));
-        t.setAmount(amount);
-        t.setCategory(category);
-        t.setMemo(memo);
-        t.setType(type);
 
-        service.save(t); // saveで更新もできる
+        // 入力エラー時
+        if (result.hasErrors()) {
+            return "edit";
+        }
+
+        service.save(transaction);
 
         return "redirect:/";
     }
